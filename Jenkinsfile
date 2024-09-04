@@ -1,8 +1,10 @@
-Pipeline {
+pipeline {
     agent any
-    stage('Build Backend'){
-        steps {
-            bat 'mvn clean package -DskipTests=true'
+        stages {
+            stage('Build Backend'){
+                steps {
+                    bat 'mvn clean package -DskipTests=true'
+                }
+            }   
         }
-    }
 }
