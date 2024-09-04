@@ -5,10 +5,10 @@ pipeline {
                 steps {
                     bat 'mvn clean package -DskipTests=true'
                 }
-            }   
+            }
             stage('Unit Test'){
                 steps {
-                    bat 'mvn test'
+                    bat 'mvn tests'
                 }
             }
             stage('Sonar Analisys'){
@@ -20,6 +20,23 @@ pipeline {
                         bat "${scannerHome}/bin/sonar-scanner -e -Dsonar.projectKey=DeployBack -Dsonar.host.url=http://192.168.210.21:9000 -Dsonar.login=3f041b5031440e2fc0b174f8b8f479fc466268b8 -Dsonar.java.binaries=target -Dsonar.coverage.exclusions=**/.mvn/**,**/src/test/**,**/model/**,**Application.java"
                     }
                 }
-            } 
+            }
+
+            stage('Quality Gate') {
+                steps {
+                    waitForQualityGate abortPipeline: true
+                }
+            }   
+        }
+
+        post {
+        
+            success {
+                echo 'This will run only if successful'
+            }
+            failure {
+                echo 'This will run only if failed'
+            }
+    
         }
 }
